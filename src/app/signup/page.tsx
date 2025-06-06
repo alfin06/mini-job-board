@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
 
 export default function SignUpPage() {
@@ -14,6 +15,7 @@ export default function SignUpPage() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { startGlobalLoader, stopGlobalLoader } = useAuth();
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,7 +25,7 @@ export default function SignUpPage() {
     setIsLoading(true);
 
     if (!fullName.trim()) {
-        setError("Full name is required.");
+        setError("Name is required.");
         setIsLoading(false);
         return;
     }
@@ -38,26 +40,28 @@ export default function SignUpPage() {
         return;
     }
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName.trim(),
-        }
-      }
-    });
-    setIsLoading(false);
+    startGlobalLoader();
 
-    if (signUpError) {
-      setError(signUpError.message);
-    } else if (data.user && data.user.identities?.length === 0) {
-       setMessage("Signup successful! Please check your email to confirm your account if confirmations are enabled. User might be inactive until confirmed.");
-    } else if (data.user) {
-      setMessage("Sign up successful! Redirecting...");
-      router.push('/'); 
-    } else {
-      setMessage("Please check your email to confirm your account.");
+    try {
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName.trim(),
+          }
+        }
+      });
+
+      if (signUpError) {
+        throw signUpError;
+      }
+      
+      setMessage("Sign up successful! Please check your email to confirm your account.");
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred.");
+    } finally {
+      stopGlobalLoader();
     }
   };
 

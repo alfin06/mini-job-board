@@ -1,6 +1,7 @@
 'use client';
 
 import { deleteJobAction } from '@/app/action';
+import { useAuth } from '@/context/AuthContext';
 import { FaTrash } from 'react-icons/fa';
 
 interface DeleteJobButtonProps {
@@ -8,15 +9,22 @@ interface DeleteJobButtonProps {
 }
 
 export default function DeleteJobButton({ jobId }: DeleteJobButtonProps) {
+  const { startGlobalLoader, stopGlobalLoader } = useAuth();
+
   const handleDelete = async () => {
     // Confirm before deleting
     if (window.confirm('Are you sure you want to delete this job posting?')) {
+      startGlobalLoader();
+
       try {
         await deleteJobAction(jobId);
       } catch (error) {
         console.error(error);
+        stopGlobalLoader();
         alert('Failed to delete job post.');
-      }
+      } finally {
+        stopGlobalLoader();
+      } 
     }
   };
 

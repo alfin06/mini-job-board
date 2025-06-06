@@ -3,31 +3,36 @@
 import { useState, FormEvent } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 import { FaEnvelope } from 'react-icons/fa';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const { startGlobalLoader, stopGlobalLoader } = useAuth();
 
   const handlePasswordReset = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
     setError('');
     setMessage('');
+    startGlobalLoader();
 
-    // This Supabase function sends the password reset email
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    
-    setIsLoading(false);
+    try {
+      // This Supabase function sends the password reset email
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
 
-    if (resetError) {
-      setError(resetError.message);
-    } else {
+      if (resetError) {
+        throw resetError;
+      }
+      
       setMessage('If an account exists for this email, a password reset link has been sent.');
+    } catch (err: any) {
+      setError(err.message || "Failed to send reset link.");
+    } finally {
+      stopGlobalLoader();
     }
   };
 
@@ -53,13 +58,12 @@ export default function ForgotPasswordPage() {
               className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Email address"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading} />
+              onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
-            <button type="submit" disabled={isLoading}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${isLoading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition shadow-md`}>
-              {isLoading ? 'Sending...' : 'Send Reset Link'}
+            <button type="submit"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition shadow-md">
+              Send Reset Link
             </button>
           </div>
         </form>

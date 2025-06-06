@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react';
 import { updateJobAction } from '@/app/action';
+import { useAuth } from '@/context/AuthContext';
 
 interface Job {
   id: string;
@@ -27,6 +28,7 @@ export default function EditJobForm({ job }: EditJobFormProps) {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { startGlobalLoader, stopGlobalLoader } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -37,6 +39,7 @@ export default function EditJobForm({ job }: EditJobFormProps) {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    startGlobalLoader(); 
 
     try {
       await updateJobAction(job.id, formData);
@@ -45,6 +48,7 @@ export default function EditJobForm({ job }: EditJobFormProps) {
       setError(err.message || 'Failed to update job.');
     } finally {
       setIsLoading(false);
+      stopGlobalLoader();
     }
   };
 

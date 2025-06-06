@@ -3,6 +3,7 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { FaLock } from 'react-icons/fa';
 
 export default function ResetPasswordPage() {
@@ -11,6 +12,7 @@ export default function ResetPasswordPage() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { startGlobalLoader, stopGlobalLoader } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -40,20 +42,26 @@ export default function ResetPasswordPage() {
     setIsLoading(true);
     setError('');
     setMessage('');
+    startGlobalLoader();
 
-    // This Supabase function updates the password for the currently authenticated user.
-    // The user will be temporarily authenticated by the session from the email link.
-    const { error: updateError } = await supabase.auth.updateUser({ password });
+    try {
+      // This Supabase function updates the password for the currently authenticated user.
+      // The user will be temporarily authenticated by the session from the email link.
+      const { error: updateError } = await supabase.auth.updateUser({ password });
 
-    setIsLoading(false);
+      setIsLoading(false);
 
-    if (updateError) {
-      setError(updateError.message);
-    } else {
+      if (updateError) {
+        throw updateError;
+      }
       setMessage('Your password has been reset successfully! Redirecting to login...');
       setTimeout(() => {
         router.push('/login');
       }, 3000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to reset password.');
+    } finally {
+      stopGlobalLoader();
     }
   };
 

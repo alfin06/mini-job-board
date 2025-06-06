@@ -124,7 +124,6 @@ Given more time, I would focus on the following enhancements:
 * **Notifications**: Implement an email notification system to notify users when their job posting is about to expire or when new jobs matching their interests are posted.
 
 * **UI/UX Polish**:
-  * Add more sophisticated loading states (e.g., skeleton loaders) instead of simple "Loading..." text.
   * Implement a toast notification system for better user feedback on actions like "Job Posted" or "Update Successful."
 
 * **Testing**: Write unit and integration tests for components and Server Actions using a framework like Jest and React Testing Library to ensure long-term stability and reliability.

@@ -10,7 +10,8 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   signOut: () => Promise<void>;
-  refreshUser: () => Promise<void>;
+  startGlobalLoader: () => void;
+  stopGlobalLoader: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,22 +25,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Function to fetch the initial user session
-  const fetchUserSession = async () => {
-    setIsLoading(true);
-    const { data: { session: currentSession }, error } = await supabase.auth.getSession();
-    if (error) {
-      console.error("Error getting session:", error.message);
-    }
-    setSession(currentSession);
-    setUser(currentSession?.user ?? null);
-    setIsLoading(false);
-  };
+  const startGlobalLoader = () => setIsLoading(true);
+  const stopGlobalLoader = () => setIsLoading(false);
 
   useEffect(() => {
-    // Fetch the initial session
-    fetchUserSession();
+    // Initial session fetch
+    const fetchInitialSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+      setUser(session?.user ?? null);
+      setIsLoading(false);
+    };
+
+    fetchInitialSession();
 
     // Set up the auth state change listener.
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -60,32 +58,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [router]);
 
   const signOut = async () => {
-    setIsLoading(true);
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("Error signing out:", error.message);
-    } else {
-      setSession(null);
-      setUser(null);
-    }
-    setIsLoading(false);
-  };
-
-  const refreshUser = async () => {
-    const { data: { session: currentSession } } = await supabase.auth.getSession();
-    if (currentSession?.user) {
-      setIsLoading(true);
-      const { data: { user: refreshedUser }, error } = await supabase.auth.getUser();
-      if (refreshedUser) {
-        setUser(refreshedUser);
-      }
-      if (error) {
-        console.error("Error manually refreshing user:", error.message);
-      }
-      setIsLoading(false);
-    } else {
-      console.log("No active user to refresh.");
-    }
+    startGlobalLoader();
+    await supabase.auth.signOut();
   };
 
   const value = {
@@ -93,7 +67,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     user,
     isLoading,
     signOut,
-    refreshUser,
+    startGlobalLoader,
+    stopGlobalLoader,
   };
 
   return (

@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import AuthDisplay from "@/components/AuthDisplay";
 import Link from "next/link";
+import GlobalLoader from "@/components/GlobalLoader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <AuthProvider>
+          <GlobalLoader />
           <header className="bg-white shadow-md sticky top-0 z-50">
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
               <Link href="/" className="text-3xl font-extrabold text-indigo-600 hover:text-indigo-500 transition-colors">

@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import { useAuth } from '@/context/AuthContext';
 
 interface JobFormState {
   title: string;
@@ -18,6 +19,7 @@ interface PostJobFormProps {
 
 export default function PostJobForm({ userId }: PostJobFormProps) {
   const router = useRouter();
+   const { startGlobalLoader, stopGlobalLoader } = useAuth();
 
   const [formData, setFormData] = useState<JobFormState>({
     title: '',
@@ -41,6 +43,7 @@ export default function PostJobForm({ userId }: PostJobFormProps) {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
+    startGlobalLoader();
     setError(null);
     setSuccessMessage(null);
 
@@ -48,6 +51,7 @@ export default function PostJobForm({ userId }: PostJobFormProps) {
     if (!formData.title || !formData.company_name || !formData.description || !formData.location || !formData.job_type) {
       setError("All fields are required, including job type.");
       setIsLoading(false);
+      stopGlobalLoader();
       return;
     }
 
@@ -87,6 +91,7 @@ export default function PostJobForm({ userId }: PostJobFormProps) {
       setError(e.message || 'Failed to post job. Please check the console and try again.');
     } finally {
       setIsLoading(false);
+      stopGlobalLoader();
     }
   };
 

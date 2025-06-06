@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { session, isLoading: authIsLoading } = useAuth();
+  const { session, isLoading: authIsLoading, startGlobalLoader, stopGlobalLoader } = useAuth();
 
   useEffect(() => {
     if (!authIsLoading && session) {
@@ -25,17 +25,23 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setIsLoading(true);
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    setIsLoading(false);
+    startGlobalLoader();
 
-    if (signInError) {
-      setError("Username or password is incorrect.");
-    } else {
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        throw signInError;
+      }
+
       window.location.href = '/';
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      stopGlobalLoader();
     }
   };
 
