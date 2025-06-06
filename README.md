@@ -4,7 +4,7 @@ A full-stack web application built with Next.js and Supabase that allows compani
 
 ## ✅ Features Implemented
 
-* **User Authentication**: Secure sign-up, login, and logout functionality handled by Supabase Auth.
+* **User Authentication**: Secure sign-up, login, logout, and forgot password functionality handled by Supabase Auth.
 * **Post Jobs**: Authenticated users can create new job postings through a protected route.
 * **Browse & Filter Jobs**: A public-facing homepage displays all job listings. Users can:
     * Search by keywords in the job title, company name, or description.
@@ -74,6 +74,7 @@ CREATE POLICY "Enable update for users based on user_id" ON public.tbl_jobs FOR 
 
 -- Allow users to delete their own jobs
 CREATE POLICY "Enable delete for users based on user_id" ON public.tbl_jobs FOR DELETE TO authenticated USING (auth.uid() = user_id);
+```
 
 **3. Set Up Environment Variables:**
 
@@ -85,7 +86,7 @@ NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
 ```
 
-**3. Run the Development Server:**
+**4. Run the Development Server:**
 ```bash
 npm run dev
 ```
@@ -105,7 +106,7 @@ This application is built using the **Next.js App Router**, which allows for a c
 
 * **Security**: Row Level Security (RLS) is enabled on the Supabase database. This provides a critical layer of security, ensuring that users can only create, update, or delete records they own, even if they somehow bypass client-side checks.
 
-## 🌟 What I Would Improve With More Time
+## 🌟 What I Would Improve
 
 Given more time, I would focus on the following enhancements:
 * **Single Sign-On (SSO)**: For ease-of-use, I would integrate Supabase's third-party login providers, such as Google or GitHub, allowing users to sign up and log in with a single click.
