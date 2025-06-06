@@ -107,18 +107,27 @@ This application is built using the **Next.js App Router**, which leverages mode
 
 ## 🌟 What I Would Improve
 
-Given more time, I would focus on the following enhancements:
-* **Single Sign-On (SSO)**: For ease-of-use, I would integrate Supabase's third-party login providers, such as Google or GitHub, allowing users to sign up and log in with a single click.
+Given more time, I would focus on the following enhancements, categorized by area:
 
-* **Advanced Search**: Implement true full-text search with Supabase for the search filter, which would be more performant and accurate than the current `ilike` query.
+### **Job Seeker Features**
 
-* **User Profiles** & **Company Pages**: Allow users to create profiles and companies to create dedicated pages, listing all their open positions.
+* **Apply for Jobs**: Create a feature for users to apply directly through the platform.
 
-* **Image Uploads**: Add the ability for companies to upload logos for their job postings using Supabase Storage.
+* **Save/Bookmark Jobs**: Allow logged-in users to save jobs they are interested in to a personal "Saved Jobs" list for later viewing.
 
-* **Show/Hide Job Post**: Add the ability for companies to show/hide their job posts.
+### **Employer & Job Management Features**
 
-* **Notifications**: Implement an email notification system to notify users when their job posting is about to expire or when new jobs matching their interests are posted.
+* **Company Profiles**: Allow authenticated employers to create a dedicated company page that lists all their open positions.
+
+* **Image Uploads**: Add the ability for companies to upload logos for their job postings.
+
+* **Show/Hide Job Posts**: Add the ability for employers to show/hide a post.
+
+### **General Platform Enhancements**
+
+* **Single Sign-On (SSO)**: Integrate third-party login providers (e.g., Google or Microsoft) for improved ease-of-use during signup and login.
+
+* **Notifications**: Implement an email notification system to alert job seekers about new relevant jobs or to notify employers about new applications.
 
 * **UI/UX Polish**:
   * Implement a toast notification system for better user feedback on actions like "Job Posted" or "Update Successful."
