@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { notFound, redirect } from 'next/navigation';
 import EditJobForm from '@/components/EditJobForm'; // We will create this next
 import Link from 'next/link';
@@ -23,7 +23,13 @@ export default async function EditJobPage({ params }: { params: { id: string } }
     cookies: {
       get(name: string) { return cookieStore.get(name)?.value; },
       set(name, value, options) { try { cookieStore.set(name, value, options); } catch (error) {} },
-      remove(name, options) { try { cookieStore.delete(name, options); } catch (error) {} },
+      remove(name: string, options: CookieOptions) {
+        try {
+          cookieStore.delete({ name, ...options });
+        } catch (error) { 
+          console.error(`Error removing cookie ${name}:`, error); 
+        }
+      },
     },
   });
 

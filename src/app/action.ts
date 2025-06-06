@@ -27,8 +27,12 @@ export async function updateJobAction(jobId: string, formData: JobFormData) {
       set(name, value, options) {
         cookieStore.set(name, value, options as CookieOptions);
       },
-      remove(name, options) {
-        cookieStore.delete(name, options as CookieOptions);
+      remove(name: string, options: CookieOptions) {
+        try {
+          cookieStore.delete({ name, ...options });
+        } catch (error) { 
+          console.error(`Error removing cookie ${name}:`, error); 
+        }
       },
     },
   });
@@ -80,8 +84,12 @@ export async function deleteJobAction(jobId: string) {
       set(name, value, options) {
         cookieStore.set(name, value, options as CookieOptions);
       },
-      remove(name, options) {
-        cookieStore.delete(name, options as CookieOptions);
+      remove(name: string, options: CookieOptions) {
+        try {
+          cookieStore.delete({ name, ...options });
+        } catch (error) { 
+          console.error(`Error removing cookie ${name}:`, error); 
+        }
       },
     },
   });

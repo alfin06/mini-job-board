@@ -30,9 +30,9 @@ export default async function PostNewJobPage() {
         remove(name: string, options: CookieOptions) {
           try {
             const cookieStore = getNextCookies();
-            cookieStore.delete(name, options);
-          } catch (error) {
-            console.warn(`Failed to delete cookie '${name}' in Server Component:`, error);
+            cookieStore.delete({ name, ...options });
+          } catch (error) { 
+            console.error(`Error removing cookie ${name}:`, error); 
           }
         },
       },
