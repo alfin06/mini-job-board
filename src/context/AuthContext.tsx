@@ -19,7 +19,8 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+// Changed: Removed React.FC for better compatibility and modern practice.
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -38,29 +39,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
+    // Fetch the initial session
     fetchUserSession();
 
-    // Set up the auth state change listener
-    const { data: authListenerData, error: listenerError } = supabase.auth.onAuthStateChange(
+    // Set up the auth state change listener.
+    const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, newSession) => {
         if (event === 'SIGNED_IN') {
           router.refresh();
         }
-        
         setSession(newSession);
         setUser(newSession?.user ?? null);
         setIsLoading(false);
       }
     );
 
-    if (listenerError) {
-      console.error("Error setting up Supabase auth state listener:", listenerError.message);
-      setIsLoading(false);
-    }
-
     // Cleanup function to unsubscribe when the component unmounts
     return () => {
-      authListenerData?.subscription?.unsubscribe();
+      authListener?.subscription?.unsubscribe();
     };
   }, [router]);
 
@@ -101,7 +97,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     refreshUser,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  // Changed: Wrapped return statement in parentheses for clarity.
+  return (
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  );
 };
 
 export const useAuth = (): AuthContextType => {
