@@ -22,7 +22,7 @@ A full-stack web application built with Next.js and Supabase that allows compani
 ## 🛠️ Tech Stack
 * **Frontend**: [**Next.js 14**](https://nextjs.org/)
 * **Backend** & **Database**: [**Supabase**](https://supabase.io/)
-* **Styling**: [**Tailwind**](https://tailwindcss.com/) CSS
+* **Styling**: [**Tailwind**](https://tailwindcss.com/)
 * **Deployment**: [**Vercel**](https://vercel.com/)
 * **Icons**: [**React Icons**](https://react-icons.github.io/react-icons/)
 
@@ -96,17 +96,14 @@ Open http://localhost:3000 in your browser to see the application.
 
 ## 🏗️ Architecture Overview
 
-This application is built using the **Next.js App Router**, which allows for a clean separation of concerns and leverages modern React features like Server Components.
+This application is built using the **Next.js App Router**, which leverages modern React features like Server Components, and deployed on **Vercel**.
 
-* **Server Components**: Pages like the main "Browse Jobs" page (`/`) and the "Job Detail" page (`/jobs/[id]`) are Server Components. They handle data fetching directly on the server using `async/await`, which simplifies logic and improves performance by reducing client-side waterfalls.
+* **Frontend (Vercel & Next.js)**: The Mini Job Board application is deployed on **Vercel**, which provides the serverless infrastructure for running Next.js application.. User requests are handled by Server Components, which fetch data directly. Interactive UI are handled by Client Components.
 
-* **Client Components**: Components requiring interactivity and state, such as the `JobSearchAndFilter` form, `PostJobForm`, `EditJobForm`, and various UI buttons, are explicitly marked with `'use client';`.
-
-* **Server Actions**: Data mutations (deleting and updating jobs) are handled securely using Next.js Server Actions. This keeps the mutation logic on the server, co-located with the data fetching logic, and prevents exposing sensitive API endpoints.
-
-* **Authentication**: Supabase handles all authentication. A client-side `AuthContext` provides session information to interactive components, while server-side pages and actions verify the user's identity by reading the auth cookie securely.
-
-* **Security**: Row Level Security (RLS) is enabled on the Supabase database. This provides a critical layer of security, ensuring that users can only create, update, or delete records they own, even if they somehow bypass client-side checks.
+* **Backend**: Supabase serves as the all-in-one backend, providing:
+  * Database: A PostgreSQL database to store job and user data.
+  * Authentication: Supabase Auth for secure user sign-up, login, logout, forgot password, and session management.
+  * Security layer: Row Level Security (RLS) policies that act as a secure backend, ensuring users can only access or modify the data they own.
 
 ## 🌟 What I Would Improve
 
