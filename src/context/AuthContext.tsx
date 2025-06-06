@@ -19,7 +19,6 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-// Changed: Removed React.FC for better compatibility and modern practice.
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
@@ -97,7 +96,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     refreshUser,
   };
 
-  // Changed: Wrapped return statement in parentheses for clarity.
   return (
     <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
   );

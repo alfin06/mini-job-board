@@ -33,7 +33,7 @@ export default function LoginPage() {
     setIsLoading(false);
 
     if (signInError) {
-      setError(signInError.message);
+      setError("Username or password is incorrect.");
     } else {
       window.location.href = '/';
     }
