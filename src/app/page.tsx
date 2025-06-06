@@ -45,25 +45,14 @@ export default async function BrowseJobsPage({
 
   // --- Fetch distinct locations
   let uniqueLocations: string[] = [];
-  let uniqueJobTypes: string[] = [];
 
   const { data: locationObjects, error: locationsError } = await supabase
     .from('tbl_jobs')
     .select('location');
 
-  const { data: jobTypeObjects, error: jobTypesError } = await supabase
-    .from('tbl_jobs')
-    .select('job_type');
-
   if (!locationsError && locationObjects) {
     uniqueLocations = [
       ...new Set(locationObjects.map(job => job.location).filter(Boolean))
-    ].sort();
-  }
-
-  if (!jobTypesError && jobTypeObjects) {
-    uniqueJobTypes = [
-      ...new Set(jobTypeObjects.map(job => job.job_type).filter(Boolean))
     ].sort();
   }
 
@@ -103,7 +92,7 @@ export default async function BrowseJobsPage({
     console.error('Error fetching jobs:', error.message);
     return (
       <div className="container mx-auto px-4 py-8">
-        <JobSearchAndFilter allLocations={uniqueLocations} allJobTypes={uniqueJobTypes} />
+        <JobSearchAndFilter allLocations={uniqueLocations} />
         <h1 className="text-3xl font-bold my-6 text-center">Browse Jobs</h1>
         <p className="text-red-500 text-center">Could not fetch jobs. Please try again later.</p>
         <p className="text-red-500 text-center">{error.message}</p>
@@ -125,7 +114,7 @@ export default async function BrowseJobsPage({
       </div>
       )}
 
-      <JobSearchAndFilter allLocations={uniqueLocations} allJobTypes={uniqueJobTypes} />
+      <JobSearchAndFilter allLocations={uniqueLocations} />
 
       {!jobs || jobs.length === 0 ? (
         <div className="text-center py-10">
