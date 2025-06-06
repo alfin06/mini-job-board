@@ -4,6 +4,8 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import Link from 'next/link';
 import JobSearchAndFilter from '@/components/JobSearchAndFilter';
 import { FaPlus } from 'react-icons/fa';
+import { formatTimeAgo } from '@/utils/dateFormatter';
+
 
 interface Job {
   id: string;
@@ -128,7 +130,12 @@ export default async function BrowseJobsPage({
               <div key={job.id}
                 className="bg-white shadow-lg rounded-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-200 flex flex-col justify-between h-64">
                 <div>
-                  <h2 className="text-2xl font-semibold text-indigo-700 mb-2 truncate">{job.title}</h2>
+                  <div className="flex justify-between items-start mb-2">
+                    <h2 className="text-2xl font-semibold text-indigo-700 truncate pr-2">{job.title}</h2>
+                    <span className="text-xs text-gray-500 whitespace-nowrap pt-1">
+                      {formatTimeAgo(job.created_at)}
+                    </span>
+                  </div>
                   <p className="text-lg text-gray-800 mb-1"><strong>Company:</strong> {job.company_name}</p>
                   <p className="text-md text-gray-600 mb-1"><strong>Location:</strong> {job.location}</p>
                   <p className="text-md text-gray-600"><strong>Type:</strong> {job.job_type}</p>

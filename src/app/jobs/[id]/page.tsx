@@ -4,6 +4,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import Link from 'next/link';
 import DeleteJobButton from '@/components/DeleteJobButton';
 import { FaPencilAlt } from 'react-icons/fa';
+import { formatFullDate } from '@/utils/dateFormatter';
 
 export default async function JobDetailPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
@@ -59,9 +60,17 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         </div>
         
         <div className="bg-white shadow-xl rounded-lg p-8 border border-gray-200">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">{job.title}</h1>
+          <div className="flex justify-between items-start mb-4">
+            <div>
+                <h1 className="text-4xl font-bold text-gray-800">{job.title}</h1>
+                <p className="text-lg text-gray-700 mt-2">at <strong>{job.company_name}</strong></p>
+            </div>
+            <div className="text-right flex-shrink-0 ml-4">
+                <p className="text-sm text-gray-500">Posted on</p>
+                <p className="font-semibold text-gray-600 whitespace-nowrap">{formatFullDate(job.created_at)}</p>
+            </div>
+          </div>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-gray-600 mb-4">
-            <p><strong>Company:</strong> {job.company_name}</p>
             <p><strong>Location:</strong> {job.location}</p>
             <p><strong>Type:</strong> {job.job_type}</p>
           </div>
