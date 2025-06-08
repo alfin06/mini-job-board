@@ -127,9 +127,11 @@ Given more time, I would focus on the following enhancements, categorized by are
 
 * **Single Sign-On (SSO)**: Integrate third-party login providers (e.g., Google or Microsoft) for improved ease-of-use during signup and login.
 
+* **AI-Powered Assistance (LLM)**: Integrate a Large Language Model to assist employers in generating professional job descriptions or to help job seekers draft tailored application materials.
+
 * **Notifications**: Implement an email notification system to alert job seekers about new relevant jobs or to notify employers about new applications.
 
-* **UI/UX Polish**:
+* **UI/UX Improvement**:
   * Implement a toast notification system for better user feedback on actions like "Job Posted" or "Update Successful."
 
 * **Testing**: Write unit and integration tests for components and Server Actions using a framework like Jest and React Testing Library to ensure long-term stability and reliability.
