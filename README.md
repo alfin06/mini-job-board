@@ -1,6 +1,6 @@
 # Mini Job Board
 
-A full-stack web application built with Next.js and Supabase that allows companies to post job openings and users to browse and filter them.
+A full-stack web application built with Next.js and Supabase that allows companies to post and manage their job openings and users to browse and filter them.
 
 **LIVE DEMO**: https://mini-job-board-opal.vercel.app/
 

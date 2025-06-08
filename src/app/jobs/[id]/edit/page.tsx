@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { notFound, redirect } from 'next/navigation';
-import EditJobForm from '@/components/EditJobForm'; // We will create this next
+import EditJobForm from '@/components/EditJobForm';
 import Link from 'next/link';
 
 interface Job {
@@ -43,7 +43,7 @@ export default async function EditJobPage({ params }: { params: { id: string } }
     .eq('id', params.id)
     .single();
 
-  // If no job is found, return a 404 page
+  // If no job is found, return an error page
   if (error || !job) {
     return notFound();
   }
