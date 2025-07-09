@@ -2,8 +2,6 @@
 
 A full-stack web application built with Next.js and Supabase that allows companies to post and manage their job openings and users to browse and filter them.
 
-**LIVE DEMO**: https://mini-job-board-opal.vercel.app/
-
 ## ✅ Features Implemented
 
 * **User Authentication**: Secure sign-up, login, logout, and forgot password functionality handled by Supabase Auth.
