@@ -31,7 +31,7 @@ To set up and run this project on your local machine, follow these steps:
 **1. Clone the Repository & Install Dependencies:**
 
 ```bash
-git clone [https://github.com/your-username/mini-job-board.git](https://github.com/your-username/mini-job-board.git)
+git clone https://github.com/alfin06/mini-job-board.git
 cd mini-job-board
 npm install
 ```
